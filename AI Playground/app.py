@@ -46,7 +46,7 @@ background-size: 100%;
 }
 </style>
 """
-st.markdown(page_bg_img, unsafe_allow_html=True)
+#st.markdown(page_bg_img, unsafe_allow_html=True)
 
 
 # App layout
