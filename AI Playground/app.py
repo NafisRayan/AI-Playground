@@ -42,12 +42,13 @@ page_bg_img = """
 background-image: url(
 https://huimin-static.oss-cn-hangzhou.aliyuncs.com/hm/a224aeca.gif
 );
-background-size: 100%;
+background-size: cover;
 }
 </style>
 """
 st.markdown(page_bg_img, unsafe_allow_html=True)
-
+# Set the theme to dark
+st.set_page_config(layout="wide", theme="dark")
 
 # App layout
 st.title("👀 AI Playground: Unleash Your Creative Spark!")
