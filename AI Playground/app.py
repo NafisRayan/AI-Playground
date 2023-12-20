@@ -46,7 +46,7 @@ background-size: calc(100vw + 100vh);
 }
 </style>
 """
-st.markdown(page_bg_img, unsafe_allow_html=True)
+#st.markdown(page_bg_img, unsafe_allow_html=True)
 
 # App layout
 st.title("👀 AI Playground: Unleash Your Creative Spark!")
