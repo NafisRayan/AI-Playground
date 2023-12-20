@@ -1,0 +1,4 @@
+streamlit
+textwrap
+os
+google.generativeai
