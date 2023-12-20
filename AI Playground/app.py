@@ -1,5 +1,4 @@
 import streamlit as st
-import textwrap
 import os
 import google.generativeai as genai
 
