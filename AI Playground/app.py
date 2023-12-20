@@ -42,7 +42,7 @@ page_bg_img = """
 background-image: url(
 https://huimin-static.oss-cn-hangzhou.aliyuncs.com/hm/a224aeca.gif
 );
-background-size: cover;
+background-size: calc(100vw + 100vh);
 }
 </style>
 """
