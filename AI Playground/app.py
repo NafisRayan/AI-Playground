@@ -66,17 +66,35 @@ write a detailed structure chart (dont draw) mentioning dataflow with direction 
 
 use the following format
 
+**1. Main Module: Create Visit**
+
+- Data In: Conversation Record
+- Data Out: Prescription
+
+**1.1 Module: Generate Conversation Record**
+
+- Data In: None
+- Data Out: Conversation Record
+
 **1.2 Module: Parse Conversation**
-   - Data In: Conversation Record
-   - Data Out: Text Description of Conversation
+
+- Data In: Conversation Record
+- Data Out: Text Description of Conversation
 
 **1.2.1 Submodule: Enhance Audio**
-   - Data In: Raw Audio Data
-   - Data Out: Noise-Reduced Modified Audio
+
+- Data In: Raw Audio Data
+- Data Out: Noise-Reduced Modified Audio
 
 **1.2.2 Submodule: Convert Audio-to-Text**
-   - Data In: Modified Audio
-   - Data Out: Raw Text Data
+
+- Data In: Modified Audio
+- Data Out: Raw Text Data
+
+**1.3 Module: Resolve Formatting**
+
+- Data In: None
+- Data Out: Formatting Flag
 
 =============================================================
 '''
