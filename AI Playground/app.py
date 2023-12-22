@@ -46,7 +46,7 @@ background-size: calc(100vw + 100vh);
 }
 </style>
 """
-#st.markdown(page_bg_img, unsafe_allow_html=True)
+st.markdown(page_bg_img, unsafe_allow_html=True)
 
 # App layout
 st.title("👀 AI Playground: Unleash Your Creative Spark!")
@@ -61,48 +61,8 @@ inp = st.text_input("Input:", "")
 sp_prompt = st.text_input("Special Prompt (Optional): ", "")
 # plan to use st.selectbox
 
-x = '''
-write a detailed structure chart (dont draw) mentioning dataflow with direction and hierarchy (using 1.1,1.2 for modules 1.1.1,1.1.2 for submodules)  based on the above information. 
-
-use the following format
-
-**1. Main Module: Create Visit**
-
-- Data In: Conversation Record
-- Data Out: Prescription
-
-**1.1 Module: Generate Conversation Record**
-
-- Data In: None
-- Data Out: Conversation Record
-
-**1.2 Module: Parse Conversation**
-
-- Data In: Conversation Record
-- Data Out: Text Description of Conversation
-
-**1.2.1 Submodule: Enhance Audio**
-
-- Data In: Raw Audio Data
-- Data Out: Noise-Reduced Modified Audio
-
-**1.2.2 Submodule: Convert Audio-to-Text**
-
-- Data In: Modified Audio
-- Data Out: Raw Text Data
-
-**1.3 Module: Resolve Formatting**
-
-- Data In: None
-- Data Out: Formatting Flag
-
-=============================================================
-'''
-
 if st.button("Generate"):
-    if sp_prompt == 'nriar':
-        inp = inp + ' ' + x 
-    elif sp_prompt:
+    if sp_prompt:
         inp = inp + " " + sp_prompt
     if inp:
         output = model.generate_content(inp).text
