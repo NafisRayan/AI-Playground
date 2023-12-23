@@ -1,2 +1,4 @@
 streamlit
-google.generativeai
+google-cloud-generative-ai
+PyPDF2
+docx2txt
