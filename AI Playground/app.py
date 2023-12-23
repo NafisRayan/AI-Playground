@@ -140,10 +140,6 @@ if st.button("Generate"):
         inp = inp + " " + sp_prompt
     if uploaded_file:
         inp = inp + " " + uploaded_file
-    
-    if inp.lower() == 'gth':
-        # Redirect to a link
-        st.markdown("[...Visit my GitHub Profile...](https://github.com/NafisRayan)")
 
     if inp:
         output = model.generate_content(inp).text
