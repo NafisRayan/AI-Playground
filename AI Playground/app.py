@@ -134,14 +134,29 @@ if file_input:
                 st.error("Unsupported file type.")
 
 output = ''
+previous_responses = []
 if st.button("Generate"):
     if sp_prompt:
         inp = inp + " " + sp_prompt
     if uploaded_file:
         inp = inp + " " + uploaded_file
+    
+    if inp.lower() == 'gth':
+        # Redirect to a link
+        st.markdown("[...Visit my GitHub Profile...](https://github.com/NafisRayan)")
+
     if inp:
         output = model.generate_content(inp).text
         st.write(output)
+
+        # # Add response to the list of previous_responses
+        # previous_responses.append(output)
+
+        # # Display all previous responses
+        # st.subheader("Previous Responses:")
+        # for i, response in enumerate(previous_responses, start=1):
+        #     st.write(f"{i}. {response}")
+
 
         # Add download button
         if output is not None:
@@ -156,8 +171,9 @@ if st.button("Generate"):
     else:
         st.error("Please enter a prompt to generate text.")
 
-st.subheader("Type 'bye' to exit. 🦴")
-st.caption("remember, Nafis Rayan is Always Right")
+st.subheader("[🔗...Visit my GitHub Profile...🔗](https://github.com/NafisRayan)")
+
+#st.caption("remember, Nafis Rayan is Always Right")
 # Add logic for saving prompts and generated text
 # Add logic for exploring different AI models
 # https://www.youtube.com/watch?v=pyWqw5yCNdo
