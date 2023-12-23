@@ -1,9 +1,10 @@
 import streamlit as st
 import google.generativeai as genai
 import os
-from io import BytesIO
+from io import BytesIO, TextIOWrapper
 import PyPDF2
 import docx2txt
+import csv
 
 genai.configure(api_key="AIzaSyDGD5HB6mAH-jnAiXTcibvXNMIt7kaz8q4")
 
@@ -44,7 +45,7 @@ page_bg_img = """
 <style>
 [data-testid="stAppViewContainer"] {
 background-image: url(
-https://i.pinimg.com/originals/19/6a/d9/196ad9d3122098b297d7b99ce9ff209f.gif
+https://wallpaperaccess.com/full/4167709.gif
 );
 background-size: cover;
 }
@@ -89,6 +90,20 @@ def extract_text_from_docx(file_bytes):
     docx = docx2txt.process(BytesIO(file_bytes))
     return docx.replace('\t', ' ').replace('\n', ' ')
 
+def extract_text_from_csv(file_bytes, encoding='utf-8'):
+    # Convert bytes to text using the specified encoding
+    file_text = file_bytes.decode(encoding)
+
+    # Use CSV reader to read the content
+    csv_reader = csv.reader(TextIOWrapper(BytesIO(file_text.encode(encoding)), encoding=encoding))
+    
+    # Concatenate all rows and columns into a single text
+    text = ""
+    for row in csv_reader:
+        text += ' '.join(row) + ' '
+
+    return text.replace('\t', ' ').replace('\n', ' ')
+
 
 
 
@@ -112,6 +127,9 @@ if file_input:
                 uploaded_file = extract_text_from_txt(uploaded_file.getvalue())
             elif file_extension == ".docx":
                 uploaded_file = extract_text_from_docx(uploaded_file.getvalue())
+            elif file_extension == ".csv":
+                uploaded_file = extract_text_from_csv(uploaded_file.getvalue())
+
             else:
                 st.error("Unsupported file type.")
 
