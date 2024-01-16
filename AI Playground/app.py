@@ -45,7 +45,7 @@ page_bg_img = """
 <style>
 [data-testid="stAppViewContainer"] {
 background-image: url(
-https://wallpaperaccess.com/full/4167709.gif
+https://cdn.wallpapersafari.com/41/41/vIdSZT.jpg
 );
 background-size: cover;
 }
