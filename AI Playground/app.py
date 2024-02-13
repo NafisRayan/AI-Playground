@@ -6,7 +6,7 @@ import PyPDF2
 import docx2txt
 import csv
 
-genai.configure(api_key="AIzaSyDGD5HB6mAH-jnAiXTcibvXNMIt7kaz8q4")
+genai.configure(api_key="AIzaSyDVrg3g6z1Aw4ElBBdwolnaSUwVuKYmlyU")
 
 # Set up the model
 generation_config = {
