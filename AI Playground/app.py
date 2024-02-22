@@ -7,9 +7,17 @@ import docx2txt
 import csv
 
 
+# App layout
+st.title("👀 AI Playground: Unleash Your Creative Spark!")
+st.header("Welcome to your own creative sandbox!")
+st.write("Enter a prompt and let AI craft stories, poems, code, and more.")
+
+
 api = st.text_input("Genai API key here:", "")
 
-genai.configure(api_key=api)
+if st.button("Generate"):
+    genai.configure(api_key=api)
+    st.write("API key received)
 
 # Set up the model
 generation_config = {
@@ -55,11 +63,6 @@ background-size: cover;
 </style>
 """
 st.markdown(page_bg_img, unsafe_allow_html=True)
-
-# App layout
-st.title("👀 AI Playground: Unleash Your Creative Spark!")
-st.header("Welcome to your own creative sandbox!")
-st.write("Enter a prompt and let AI craft stories, poems, code, and more.")
 
 
 
