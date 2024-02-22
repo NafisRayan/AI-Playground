@@ -13,7 +13,7 @@ st.header("Welcome to your own creative sandbox!")
 st.write("Enter a prompt and let AI craft stories, poems, code, and more.")
 
 
-api = st.text_input("Genai API key here:", "")
+api = st.text_input("Gemenai API key here:", "")
 
 # genai.configure(api_key=api)
 
@@ -140,6 +140,9 @@ if file_input:
 output = ''
 previous_responses = []
 if st.button("Generate"):
+    if api == '':
+        st.error("Need to input Gemenai API key.")
+        break
     genai.configure(api_key=api)
     if sp_prompt:
         inp = inp + " " + sp_prompt
