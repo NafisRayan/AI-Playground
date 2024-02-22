@@ -142,7 +142,7 @@ previous_responses = []
 if st.button("Generate"):
     if api == '':
         st.error("Need to input Gemenai API key.")
-        break
+
     genai.configure(api_key=api)
     if sp_prompt:
         inp = inp + " " + sp_prompt
