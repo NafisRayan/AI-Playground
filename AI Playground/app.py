@@ -15,9 +15,7 @@ st.write("Enter a prompt and let AI craft stories, poems, code, and more.")
 
 api = st.text_input("Genai API key here:", "")
 
-if st.button("Generate"):
-    genai.configure(api_key=api)
-    st.write("API key received)
+# genai.configure(api_key=api)
 
 # Set up the model
 generation_config = {
@@ -142,6 +140,7 @@ if file_input:
 output = ''
 previous_responses = []
 if st.button("Generate"):
+    genai.configure(api_key=api)
     if sp_prompt:
         inp = inp + " " + sp_prompt
     if uploaded_file:
