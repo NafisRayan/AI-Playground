@@ -1,4 +1,7 @@
 import streamlit as st
+import pandas as pd
+import requests
+from bs4 import BeautifulSoup
 import google.generativeai as genai
 import os
 from io import BytesIO, TextIOWrapper
@@ -6,16 +9,49 @@ import PyPDF2
 import docx2txt
 import csv
 
-
-# App layout
-st.title("👀 AI Playground: Unleash Your Creative Spark!")
-st.header("Welcome to your own creative sandbox!")
-st.write("Enter a prompt and let AI craft stories, poems, code, and more.")
-
+# Streamlit app code
+st.title('👀 Web Scraping with Pandas and Streamlit and Gemini')
 
 api = st.text_input("Gemenai API key here:", "")
 
-# genai.configure(api_key=api)
+# Function to scrape data
+def scrape_data(url):
+    # Send HTTP request and parse content
+    response = requests.get(url)
+    # print(response)
+    soup = BeautifulSoup(response.content, 'html.parser')
+
+    # Scraping logic - use BeautifulSoup to find and extract various types of content
+    texts = [element.text for element in soup.find_all(['p', 'a', 'img'])]
+    links = [element.get('href') for element in soup.find_all('a') if element.get('href')]
+    images = [element.get('src') for element in soup.find_all('img') if element.get('src')]
+
+    # Ensure all lists are of the same length by padding the shorter ones with None
+    max_length = max(len(texts), len(links), len(images))
+    texts += [None] * (max_length - len(texts))
+    links += [None] * (max_length - len(links))
+    images += [None] * (max_length - len(images))
+
+    # Create a DataFrame using pandas for texts, links, and images
+    data = {'Text': texts, 'Links': links, 'Images': images}
+    df = pd.DataFrame(data)
+
+    # return the processed data
+    return df
+
+# Button to trigger scraping
+# if st.button('Scrape Data'):
+#     if url:
+#         if 'https://' not in url:
+#             url = 'https://' + url
+#         scraped_data = scrape_data(url)
+#         paragraph = ' '.join(scraped_data['Text'].dropna())
+#         st.write(scraped_data)
+#         st.write(paragraph)
+       
+#     else:
+#         st.write('Please enter a valid website URL')
+
 
 # Set up the model
 generation_config = {
@@ -64,13 +100,11 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 
 
 
-inp = st.text_input("Input:", "")
-# plan to use st.file_uploader
-# plan to use st.camera_input
+inp = st.text_input("Enter a prompt and let AI craft stories, poems, code, and more.", "")
 
-sp_prompt = st.text_input("Special Prompt (Optional): ", "")
-
-
+prompt_input = st.checkbox("Use prompt input")
+if prompt_input:
+    sp_prompt = st.selectbox("Special Prompt (Optional):", ["Option 1", "Option 2", "Option 3"])
 
 # Function to extract text from a PDF file
 def extract_text_from_pdf(file_bytes):
@@ -110,6 +144,10 @@ def extract_text_from_csv(file_bytes, encoding='utf-8'):
 
 
 
+url_input = st.checkbox("Use website input")
+if url_input:
+    # Input for the website URL
+    url = st.text_input('Enter the website URL (optional): ', '')
 
 file_input = st.checkbox("Use file input")
 uploaded_file = None
@@ -144,6 +182,16 @@ if st.button("Generate"):
         st.error("Need to input Gemenai API key.")
 
     genai.configure(api_key=api)
+    if url:
+        if 'https://' not in url:
+            url = 'https://' + url
+        scraped_data = scrape_data(url)
+        paragraph = ' '.join(scraped_data['Text'].dropna())
+        # st.write(scraped_data)
+        # st.write(paragraph)
+
+        inp = paragraph + '\n\n' +"Take the given data above, as information and generate a response based on this prompt {inp}."        
+
     if sp_prompt:
         inp = inp + " " + sp_prompt
     if uploaded_file:
@@ -176,12 +224,5 @@ if st.button("Generate"):
         st.error("Please enter a prompt to generate text.")
 
 st.subheader("[🔗...Visit my GitHub Profile...🔗](https://github.com/NafisRayan)")
-
-#st.caption("remember, Nafis Rayan is Always Right")
-# Add logic for saving prompts and generated text
-# Add logic for exploring different AI models
-# https://www.youtube.com/watch?v=pyWqw5yCNdo
-# https://www.youtube.com/watch?v=_Um12_OlGgw
-# https://www.youtube.com/watch?v=vIQQR_yq-8I
 
 # streamlit run app.py
