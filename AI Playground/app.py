@@ -102,6 +102,7 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 
 inp = st.text_input("Enter a prompt and let AI craft stories, poems, code, and more.", "")
 
+
 sp_prompt = ""
 prompt_input = st.checkbox("Use prompt input")
 if prompt_input:
@@ -146,6 +147,7 @@ def extract_text_from_csv(file_bytes, encoding='utf-8'):
 
 
 url_input = st.checkbox("Use website input")
+url = ""
 if url_input:
     # Input for the website URL
     url = st.text_input('Enter the website URL (optional): ', '')
