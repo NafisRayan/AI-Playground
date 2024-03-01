@@ -102,6 +102,7 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 
 inp = st.text_input("Enter a prompt and let AI craft stories, poems, code, and more.", "")
 
+sp_prompt = ""
 prompt_input = st.checkbox("Use prompt input")
 if prompt_input:
     sp_prompt = st.selectbox("Special Prompt (Optional):", ["Option 1", "Option 2", "Option 3"])
