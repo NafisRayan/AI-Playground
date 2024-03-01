@@ -193,7 +193,7 @@ if st.button("Generate"):
         # st.write(scraped_data)
         # st.write(paragraph)
 
-        inp = paragraph + '\n\n' +"Take the given data above, as information and generate a response based on this prompt {inp}."        
+        inp = paragraph + ' ' +"Take the given data above, as information and generate a response based on this prompt: " + inp       
 
     if sp_prompt:
         inp = inp + " " + sp_prompt
@@ -201,6 +201,7 @@ if st.button("Generate"):
         inp = inp + " " + uploaded_file
 
     if inp:
+        # st.write(inp)
         output = model.generate_content(inp).text
         st.write(output)
 
