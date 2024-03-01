@@ -1,5 +1,7 @@
 streamlit
+pandas
+requests
+beautifulsoup4
 google-generativeai
 PyPDF2
 docx2txt
-BeautifulSoup
