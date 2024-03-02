@@ -227,6 +227,6 @@ if st.button("Generate"):
     else:
         st.error("Please enter a prompt to generate text.")
 
-st.subheader("[🔗...Visit my GitHub Profile...🔗](https://github.com/NafisRayan)")
+#st.subheader("[🔗...Visit my GitHub Profile...🔗](https://github.com/NafisRayan)")
 
 # streamlit run app.py
