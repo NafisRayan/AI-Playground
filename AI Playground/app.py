@@ -8,6 +8,7 @@ from io import BytesIO, TextIOWrapper
 import PyPDF2
 import docx2txt
 import csv
+from huggingface_hub import InferenceClient
 
 st.title('👀 AI Playground ')
 
@@ -78,8 +79,6 @@ else:
         mkey= "mistralai/Mixtral-8x7B-Instruct-v0.1"
     else:
         mkey = "microsoft/Phi-3-mini-4k-instruct"
-
-    from huggingface_hub import InferenceClient
 
     def format_prompt(message, history):
         prompt = ""
