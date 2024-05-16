@@ -9,10 +9,153 @@ import PyPDF2
 import docx2txt
 import csv
 
-# Streamlit app code
-st.title('👀 Web Scraping with Pandas and Streamlit and Gemini')
+st.title('👀 AI Playground ')
 
-api = st.text_input("Gemenai API key here:", "")
+st.text('Web Scraping with Pandas and Streamlit, Gemini, Mistral, and Phi-3')
+
+Model = st.selectbox("Select your prefered model:", ["GEMINI", "MISTRAL8X", "PHI-3"])
+
+if Model == "GEMINI":
+    tkey = st.text_input("Your Token or API key here:", "")
+
+
+    # Button to trigger scraping
+    # if st.button('Scrape Data'):
+    #     if url:
+    #         if 'https://' not in url:
+    #             url = 'https://' + url
+    #         scraped_data = scrape_data(url)
+    #         paragraph = ' '.join(scraped_data['Text'].dropna())
+    #         st.write(scraped_data)
+    #         st.write(paragraph)
+        
+    #     else:
+    #         st.write('Please enter a valid website URL')
+
+
+    # Set up the model
+    generation_config = {
+        "temperature": 0.9,
+        "top_p": 1,
+        "top_k": 1,
+        "max_output_tokens": 2048,
+    }
+
+    safety_settings = [
+        {
+            "category": "HARM_CATEGORY_HARASSMENT",
+            "threshold": "BLOCK_MEDIUM_AND_ABOVE",
+        },
+        {
+            "category": "HARM_CATEGORY_HATE_SPEECH",
+            "threshold": "BLOCK_MEDIUM_AND_ABOVE",
+        },
+        {
+            "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+            "threshold": "BLOCK_MEDIUM_AND_ABOVE",
+        },
+        {
+            "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+            "threshold": "BLOCK_MEDIUM_AND_ABOVE",
+        },
+    ]
+
+    model = genai.GenerativeModel(model_name="gemini-pro",
+                                generation_config=generation_config,
+                                safety_settings=safety_settings)
+    
+    genai.configure(api_key=tkey)
+
+    def gai(inp):
+        return model.generate_content(inp).text
+
+################################################################################################################
+
+else:
+    tkey = st.text_input("HuggingFace token here:", "")
+
+    if Model == "MISTRAL8X":
+        mkey= "mistralai/Mixtral-8x7B-Instruct-v0.1"
+    else:
+        mkey = "microsoft/Phi-3-mini-4k-instruct"
+
+    from huggingface_hub import InferenceClient
+
+    def format_prompt(message, history):
+        prompt = ""
+        for user_prompt, bot_response in history:
+            prompt += f"[INST] {user_prompt} [/INST]"
+            prompt += f" {bot_response} "
+        prompt += f"[INST] {message} [/INST]"
+        return prompt
+
+    def generate(prompt, history=[], temperature=0.9, max_new_tokens=1024, top_p=0.95, repetition_penalty=1.0):
+        temperature = float(temperature)
+        if temperature < 1e-2:
+            temperature = 1e-2
+        top_p = float(top_p)
+
+        generate_kwargs = dict(
+            temperature=temperature,
+            max_new_tokens=max_new_tokens,
+            top_p=top_p,
+            repetition_penalty=repetition_penalty,
+            do_sample=True,
+            seed=42,
+        )
+
+        formatted_prompt = format_prompt(prompt, history)
+
+        client = InferenceClient(model= mkey, token=tkey)
+        stream = client.text_generation(formatted_prompt, **generate_kwargs, stream=True, details=True, return_full_text=False)
+        output = ""
+
+        for response in stream:
+            output += response.token.text
+        
+        output = output.replace("<s>", "").replace("</s>", "")
+        
+        yield output
+        return output
+
+
+    # history = []
+    # while True:
+    #     user_input = input("You: ")
+    #     if user_input.lower() == "off":
+    #         break
+    #     history.append((user_input, "")) 
+    #     for response in generate(user_input, history):
+    #         print("Bot:", response)
+
+    def gai(query):
+        x=''
+        for response in generate(query):
+            x+=response
+        return x
+    
+################################################################################################################
+
+
+# bg image
+page_bg_img = """
+<style>
+[data-testid="stAppViewContainer"] {
+background-image: url(
+https://cdn.wallpapersafari.com/41/41/vIdSZT.jpg
+);
+background-size: cover;
+}
+</style>
+"""
+st.markdown(page_bg_img, unsafe_allow_html=True)
+
+inp = st.text_input("Enter a prompt and let AI craft stories, poems, code, and more.", "")
+
+sp_prompt = ""
+prompt_input = st.checkbox("Use prompt input")
+if prompt_input:
+    sp_prompt = st.selectbox("Special Prompt (Optional):", ["Option 1", "Option 2", "Option 3"])
 
 # Function to scrape data
 def scrape_data(url):
@@ -38,75 +181,6 @@ def scrape_data(url):
 
     # return the processed data
     return df
-
-# Button to trigger scraping
-# if st.button('Scrape Data'):
-#     if url:
-#         if 'https://' not in url:
-#             url = 'https://' + url
-#         scraped_data = scrape_data(url)
-#         paragraph = ' '.join(scraped_data['Text'].dropna())
-#         st.write(scraped_data)
-#         st.write(paragraph)
-       
-#     else:
-#         st.write('Please enter a valid website URL')
-
-
-# Set up the model
-generation_config = {
-    "temperature": 0.9,
-    "top_p": 1,
-    "top_k": 1,
-    "max_output_tokens": 2048,
-}
-
-safety_settings = [
-    {
-        "category": "HARM_CATEGORY_HARASSMENT",
-        "threshold": "BLOCK_MEDIUM_AND_ABOVE",
-    },
-    {
-        "category": "HARM_CATEGORY_HATE_SPEECH",
-        "threshold": "BLOCK_MEDIUM_AND_ABOVE",
-    },
-    {
-        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-        "threshold": "BLOCK_MEDIUM_AND_ABOVE",
-    },
-    {
-        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
-        "threshold": "BLOCK_MEDIUM_AND_ABOVE",
-    },
-]
-
-model = genai.GenerativeModel(model_name="gemini-pro",
-                            generation_config=generation_config,
-                            safety_settings=safety_settings)
-
-
-# bg image
-page_bg_img = """
-<style>
-[data-testid="stAppViewContainer"] {
-background-image: url(
-https://cdn.wallpapersafari.com/41/41/vIdSZT.jpg
-);
-background-size: cover;
-}
-</style>
-"""
-st.markdown(page_bg_img, unsafe_allow_html=True)
-
-
-
-inp = st.text_input("Enter a prompt and let AI craft stories, poems, code, and more.", "")
-
-
-sp_prompt = ""
-prompt_input = st.checkbox("Use prompt input")
-if prompt_input:
-    sp_prompt = st.selectbox("Special Prompt (Optional):", ["Option 1", "Option 2", "Option 3"])
 
 # Function to extract text from a PDF file
 def extract_text_from_pdf(file_bytes):
@@ -181,10 +255,9 @@ if file_input:
 output = ''
 previous_responses = []
 if st.button("Generate"):
-    if api == '':
-        st.error("Need to input Gemenai API key.")
+    if tkey == '':
+        st.error("Need to input Token or API key.")
 
-    genai.configure(api_key=api)
     if url:
         if 'https://' not in url:
             url = 'https://' + url
@@ -202,7 +275,7 @@ if st.button("Generate"):
 
     if inp:
         # st.write(inp)
-        output = model.generate_content(inp).text
+        output = gai(inp)
         st.write(output)
 
         # # Add response to the list of previous_responses
