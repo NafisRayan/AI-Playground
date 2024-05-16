@@ -151,11 +151,6 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 
 inp = st.text_input("Enter a prompt and let AI craft stories, poems, code, and more.", "")
 
-sp_prompt = ""
-prompt_input = st.checkbox("Use prompt input")
-if prompt_input:
-    sp_prompt = st.selectbox("Special Prompt (Optional):", ["Option 1", "Option 2", "Option 3"])
-
 # Function to scrape data
 def scrape_data(url):
     # Send HTTP request and parse content
@@ -227,6 +222,15 @@ if url_input:
 
 file_input = st.checkbox("Use file input")
 uploaded_file = None
+
+sp_prompt = ""
+prompt_input = st.checkbox("Use special prompt input")
+if prompt_input:
+    sp_prompt = st.selectbox("Special Prompt (Optional):", [
+        "Prompt A: Explain the following with proper details.",
+        "Prompt B: Describe the whole thing in a nutshell.",
+        "Prompt C: How this can be useful for us?"
+    ])
 
 if file_input:
     # Add file uploader
